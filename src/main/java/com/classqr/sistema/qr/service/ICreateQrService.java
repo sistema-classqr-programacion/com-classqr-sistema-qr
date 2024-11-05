@@ -1,5 +1,6 @@
 package com.classqr.sistema.qr.service;
 
+import com.classqr.sistema.qr.dto.GenerarQrDTO;
 import com.google.zxing.WriterException;
 
 import java.io.IOException;
@@ -7,7 +8,7 @@ import java.io.IOException;
 public interface ICreateQrService {
 
 
-    byte[] generateQRCode( int width, int height) throws IOException, WriterException;
+    GenerarQrDTO generateQRCode(int width, int height, String codigoQr) throws IOException, WriterException;
 
 
 }

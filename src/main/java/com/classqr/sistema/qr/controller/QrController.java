@@ -1,10 +1,11 @@
 package com.classqr.sistema.qr.controller;
 
-import com.classqr.sistema.commons.dto.AsistenciaDTO;
-import com.classqr.sistema.commons.dto.AsistenciaSeguridadDTO;
+import com.classqr.sistema.commons.dto.QrSeguridadDTO;
 import com.classqr.sistema.commons.dto.RespuestaGeneralDTO;
 import com.classqr.sistema.commons.service.IJwtService;
 import com.classqr.sistema.qr.dto.AutenticationDTO;
+import com.classqr.sistema.qr.dto.GenerarQrDTO;
+import com.classqr.sistema.qr.dto.QueryQrDTO;
 import com.classqr.sistema.qr.service.ICreateQrService;
 import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
@@ -27,18 +28,12 @@ public class QrController {
 
     private final IJwtService iJwtService;
 
-    @GetMapping("/asistencia")
-    public ResponseEntity<byte[]> getQrAsistencia() {
+    @PostMapping("/asistencia")
+    public ResponseEntity<GenerarQrDTO> getQrAsistencia(@RequestBody QueryQrDTO qrDTO) {
         try {
             // Generar código QR
-            byte[] qrImage = iCreateQrService.generateQRCode(300, 300);
-
-            // Configurar los encabezados para devolver una imagen PNG
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_PNG);
-
-            // Devolver la imagen con código de estado 200 OK
-            return new ResponseEntity<>(qrImage, headers, HttpStatus.OK);
+            GenerarQrDTO qrImage = iCreateQrService.generateQRCode(300, 300, qrDTO.getCodigoQr());
+            return new ResponseEntity<>(qrImage, HttpStatus.OK);
         } catch (IOException | WriterException e) {
             log.error("Error ", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,7 +45,7 @@ public class QrController {
         try {
             RespuestaGeneralDTO respuestaGeneralDTO = new RespuestaGeneralDTO();
             respuestaGeneralDTO.setStatus(HttpStatus.OK);
-            respuestaGeneralDTO.setData(iJwtService.isTokenValid(autenticationDTO.getToken(), new AsistenciaSeguridadDTO(autenticationDTO.getAsistenciaDTO())));
+            respuestaGeneralDTO.setData(iJwtService.isTokenValid(autenticationDTO.getToken(), new QrSeguridadDTO(autenticationDTO.getQrDTO())));
             respuestaGeneralDTO.setMessage("Se valido correctamente");
             // Devolver la imagen con código de estado 200 OK
             return ResponseEntity.status(HttpStatus.OK.value()).body(respuestaGeneralDTO);
