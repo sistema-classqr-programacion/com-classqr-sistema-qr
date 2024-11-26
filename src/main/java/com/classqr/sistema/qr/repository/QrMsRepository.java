@@ -10,8 +10,12 @@ import org.springframework.stereotype.Repository;
 public interface QrMsRepository extends JpaRepository<QrEntity, String> {
 
     @Query("""
-        SELECT qrEntity from QrEntity qrEntity where qrEntity.fechaFinQr >= CURRENT_TIMESTAMP AND qrEntity.codigoQr = :codigoQr
+        SELECT qrEntity from QrEntity qrEntity
+         where qrEntity.fechaFinQr >= CURRENT_TIMESTAMP
+          AND qrEntity.codigoProfesorFk.codigoProfesor = :codigoProfesorFk
+         AND qrEntity.cursoFk.codigoCurso = :codigoCursoFk
     """)
-    QrEntity existenciaQrNoVencido(@Param("codigoQr") String codigoQr);
+    QrEntity existenciaQrNoVencido(@Param("codigoProfesorFk") String codigoProfesorFk,
+                                   @Param("codigoCursoFk") String codigoCursoFk);
 
 }

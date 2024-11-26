@@ -32,7 +32,7 @@ public class QrController {
     public ResponseEntity<GenerarQrDTO> getQrAsistencia(@RequestBody QueryQrDTO qrDTO) {
         try {
             // Generar código QR
-            GenerarQrDTO qrImage = iCreateQrService.generateQRCode(300, 300, qrDTO.getCodigoQr());
+            GenerarQrDTO qrImage = iCreateQrService.generateQRCode(300, 300, qrDTO);
             return new ResponseEntity<>(qrImage, HttpStatus.OK);
         } catch (IOException | WriterException e) {
             log.error("Error ", e);

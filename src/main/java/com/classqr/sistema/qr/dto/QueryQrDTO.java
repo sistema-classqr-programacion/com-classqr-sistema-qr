@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class QueryQrDTO {
 
-    private String codigoQr;
+    private String codigoProfesor;
+
+    private String codigoCurso;
 
 }

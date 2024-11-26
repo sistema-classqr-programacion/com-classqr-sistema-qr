@@ -6,40 +6,36 @@ import com.classqr.sistema.commons.util.enums.CodigoUsuarioEnum;
 import com.classqr.sistema.commons.util.helper.Utilidades;
 import com.classqr.sistema.commons.util.mapper.AsistenciaMapper;
 import com.classqr.sistema.qr.repository.AsistenciaQrRepository;
-import com.classqr.sistema.qr.service.ICreateAsistenciaService;
+import com.classqr.sistema.qr.service.IEliminarAsistenciaService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.ExecutionException;
-
 @Service
+@Slf4j
 @RequiredArgsConstructor
-@Log4j2
-public class CreateAsistenciaService implements ICreateAsistenciaService {
+public class EliminarAsistenciaService implements IEliminarAsistenciaService {
 
     private final AsistenciaQrRepository asistenciaQrRepository;
 
     private final AsistenciaMapper asistenciaMapper;
-    private final SecurityProperties securityProperties;
 
     @Override
     @Transactional
-    public RespuestaGeneralDTO saveAsistencia(AsistenciaDTO asistenciaDTO) {
+    public RespuestaGeneralDTO eliminarAsistencia(AsistenciaDTO asistenciaDTO) {
         RespuestaGeneralDTO respuestaGeneralDTO = new RespuestaGeneralDTO();
         try{
-            if(asistenciaDTO.getCodigoAsistencia() == null){
-                asistenciaDTO.setCodigoAsistencia(Utilidades.generarCodigo(CodigoUsuarioEnum.ASISTENCIA));
-            }
-            asistenciaQrRepository.save(asistenciaMapper.dtoToEntity(asistenciaDTO));
-            respuestaGeneralDTO.setMessage("Se guardo correctamente");
-            respuestaGeneralDTO.setStatus(HttpStatus.CREATED);
+            asistenciaQrRepository.eliminarAsistencia(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(),
+                    asistenciaDTO.getCodigoProfesorFk().getCodigoProfesor(),
+                    asistenciaDTO.getCodigoCursoFk().getCodigoCurso(),
+                    asistenciaDTO.getFechaAsistencia());
+            respuestaGeneralDTO.setMessage("Se elimino correctamente");
+            respuestaGeneralDTO.setStatus(HttpStatus.OK);
         }catch (Exception e){
             log.error("Error ", e);
-            respuestaGeneralDTO.setMessage("Hubo un error en registrar la asistencia");
+            respuestaGeneralDTO.setMessage("Hubo un error en eliminar la asistencia");
             respuestaGeneralDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return respuestaGeneralDTO;

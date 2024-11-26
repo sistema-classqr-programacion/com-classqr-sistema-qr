@@ -31,6 +31,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.6.0</version>
+		</dependency>
 		<!-- Spring Boot JPA and Web Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -84,7 +89,7 @@
 		<dependency>
 			<groupId>com.classqr.sistema</groupId>
 			<artifactId>commons</artifactId>
-			<version>0.0.24</version>
+			<version>0.0.30</version>
 		</dependency>
 	</dependencies>
 
