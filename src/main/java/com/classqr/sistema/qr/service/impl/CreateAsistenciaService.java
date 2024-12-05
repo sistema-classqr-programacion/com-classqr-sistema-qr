@@ -39,11 +39,13 @@ public class CreateAsistenciaService implements ICreateAsistenciaService {
         RespuestaGeneralDTO respuestaGeneralDTO = new RespuestaGeneralDTO();
         try{
             QrDTO qrDto = qrMapper.entityToDto(qrRepository.findByCodigoQr(asistenciaDTO.getCodigoQrFk().getCodigoQr()));
+            log.error(qrDto.getCursoFk().getCodigoCurso());
             if(!estudianteCursoRepository.existsByCodigoEstudianteEntityFk_CodigoEstudianteAndCodigoCursoEntityFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), qrDto.getCursoFk().getCodigoCurso())){
                 respuestaGeneralDTO.setStatus(HttpStatus.BAD_REQUEST);
                 respuestaGeneralDTO.setMessage("El estudiante no es de este curso");
                 return respuestaGeneralDTO;
             }
+            log.error(asistenciaQrRepository.existsByCodigoEstudianteFk_CodigoEstudianteAndCodigoCursoFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), qrDto.getCursoFk().getCodigoCurso()));
             if(asistenciaQrRepository.existsByCodigoEstudianteFk_CodigoEstudianteAndCodigoCursoFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), qrDto.getCursoFk().getCodigoCurso())){
                 respuestaGeneralDTO.setStatus(HttpStatus.BAD_REQUEST);
                 respuestaGeneralDTO.setMessage("Ya se realizo la asistencia con este estudiante");
