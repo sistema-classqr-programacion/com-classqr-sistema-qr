@@ -54,7 +54,7 @@ public class CreateQrService implements ICreateQrService {
         profesorDTO.setCodigoProfesor(queryQrDTO.getCodigoProfesor());
         qrDTO.setCodigoQr(Utilidades.generarCodigo(CodigoUsuarioEnum.ASISTENCIA));
         qrDTO.setFechaCreacionQr(LocalDateTime.now());
-        qrDTO.setFechaFinQr(LocalDateTime.now().plusHours(4));
+        qrDTO.setFechaFinQr(LocalDateTime.now().plusMinutes(30));
         AuthResponseDTO authResponseDTO = jwtService.generarToken(new QrSeguridadDTO(qrDTO));
         String qrUrl = "https://classqr-front-app-brgwhpejgrfzh5d0.mexicocentral-01.azurewebsites.net/asistencia?token=" + authResponseDTO.getToken();
         BitMatrix bitMatrix = new MultiFormatWriter().encode(qrUrl, BarcodeFormat.QR_CODE, width, height);
