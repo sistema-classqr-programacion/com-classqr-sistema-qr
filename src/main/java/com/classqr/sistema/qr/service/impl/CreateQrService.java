@@ -2,14 +2,13 @@ package com.classqr.sistema.qr.service.impl;
 
 import com.classqr.sistema.commons.dto.*;
 import com.classqr.sistema.commons.entity.QrEntity;
-import com.classqr.sistema.commons.repository.QrRepository;
 import com.classqr.sistema.commons.service.impl.JwtService;
 import com.classqr.sistema.commons.util.enums.CodigoUsuarioEnum;
 import com.classqr.sistema.commons.util.helper.Utilidades;
 import com.classqr.sistema.commons.util.mapper.QrMapper;
 import com.classqr.sistema.qr.dto.GenerarQrDTO;
 import com.classqr.sistema.qr.dto.QueryQrDTO;
-import com.classqr.sistema.qr.repository.QrMsRepository;
+import com.classqr.sistema.qr.repository.QrRepository;
 import com.classqr.sistema.qr.service.ICreateQrService;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -31,7 +30,7 @@ public class CreateQrService implements ICreateQrService {
 
     private final JwtService jwtService;
 
-    private final QrMsRepository qrRepository;
+    private final QrRepository qrRepository;
 
     private final QrMapper qrMapper;
 

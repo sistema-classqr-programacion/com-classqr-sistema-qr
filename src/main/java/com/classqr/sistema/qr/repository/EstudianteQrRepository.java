@@ -1,3 +1,7 @@
+/**
+ * Repositorio JPA para gestionar las operaciones relacionadas con la entidad {@link EstudianteEntity}.
+ * Proporciona acceso a las operaciones CRUD para los registros de estudiantes.
+ */
 package com.classqr.sistema.qr.repository;
 
 import com.classqr.sistema.commons.entity.EstudianteEntity;
