@@ -44,7 +44,7 @@ public class CreateAsistenciaService implements ICreateAsistenciaService {
                 respuestaGeneralDTO.setMessage("El estudiante no es de este curso");
                 return respuestaGeneralDTO;
             }
-            if(asistenciaQrRepository.existsByCodigoEstudianteFk_CodigoEstudiante(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante())){
+            if(asistenciaQrRepository.existsByCodigoEstudianteFk_CodigoEstudianteAndCodigoCursoFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), qrDto.getCursoFk().getCodigoCurso())){
                 respuestaGeneralDTO.setStatus(HttpStatus.BAD_REQUEST);
                 respuestaGeneralDTO.setMessage("Ya se realizo la asistencia con este estudiante");
                 return respuestaGeneralDTO;

@@ -25,7 +25,7 @@ public interface AsistenciaQrRepository extends JpaRepository<AsistenciaEntity, 
      * @param codigoEstudianteFk el código único del estudiante.
      * @return {@code true} si existe un registro de asistencia para el estudiante, de lo contrario {@code false}.
      */
-    Boolean existsByCodigoEstudianteFk_CodigoEstudiante(String codigoEstudianteFk);
+    Boolean existsByCodigoEstudianteFk_CodigoEstudianteAndCodigoCursoFk_CodigoCurso(String codigoEstudianteFk, String codigoCurso);
 
     /**
      * Elimina un registro de asistencia basado en el profesor, estudiante, curso y fecha especificados.
