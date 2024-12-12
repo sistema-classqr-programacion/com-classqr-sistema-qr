@@ -40,7 +40,11 @@ public class CreateAsistenciaService implements ICreateAsistenciaService {
         try{
             QrDTO qrDto =null;
             if(asistenciaDTO.getCodigoQrFk() != null){
-                qrDto = qrMapper.entityToDto(qrRepository.findByCodigoQr(asistenciaDTO.getCodigoCursoFk().getCodigoCurso()));
+                qrDto = qrMapper.entityToDto(qrRepository.findByCodigoQr(asistenciaDTO.getCodigoQrFk().getCodigoQr()));
+            }
+            if(qrDto != null){
+                asistenciaDTO.setCodigoCursoFk(qrDto.getCursoFk());
+                asistenciaDTO.setCodigoProfesorFk(qrDto.getCodigoProfesorFk());
             }
             if(!estudianteCursoRepository.existsByCodigoEstudianteEntityFk_CodigoEstudianteAndCodigoCursoEntityFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), asistenciaDTO.getCodigoCursoFk().getCodigoCurso())){
                 respuestaGeneralDTO.setStatus(HttpStatus.BAD_REQUEST);
@@ -55,15 +59,9 @@ public class CreateAsistenciaService implements ICreateAsistenciaService {
             if(asistenciaDTO.getCodigoAsistencia() == null){
                 asistenciaDTO.setCodigoAsistencia(Utilidades.generarCodigo(CodigoUsuarioEnum.ASISTENCIA));
             }
-            if(qrDto != null){
-                asistenciaDTO.setCodigoQrFk(qrDto);
-                asistenciaDTO.setCodigoProfesorFk(qrDto.getCodigoProfesorFk());
-                asistenciaDTO.setCodigoCursoFk(qrDto.getCursoFk());
-            }else{
-                asistenciaDTO.setCodigoProfesorFk(asistenciaDTO.getCodigoProfesorFk());
-                asistenciaDTO.setCodigoCursoFk(asistenciaDTO.getCodigoCursoFk());
-            }
-
+            asistenciaDTO.setCodigoQrFk(qrDto);
+            asistenciaDTO.setCodigoProfesorFk(asistenciaDTO.getCodigoProfesorFk());
+            asistenciaDTO.setCodigoCursoFk(asistenciaDTO.getCodigoCursoFk());
             asistenciaQrRepository.save(asistenciaMapper.dtoToEntity(asistenciaDTO));
             respuestaGeneralDTO.setMessage("Se guardo correctamente");
             respuestaGeneralDTO.setStatus(HttpStatus.CREATED);
