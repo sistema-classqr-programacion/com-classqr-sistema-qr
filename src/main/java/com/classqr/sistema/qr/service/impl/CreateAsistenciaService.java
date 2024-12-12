@@ -55,9 +55,15 @@ public class CreateAsistenciaService implements ICreateAsistenciaService {
             if(asistenciaDTO.getCodigoAsistencia() == null){
                 asistenciaDTO.setCodigoAsistencia(Utilidades.generarCodigo(CodigoUsuarioEnum.ASISTENCIA));
             }
-            asistenciaDTO.setCodigoQrFk(qrDto);
-            asistenciaDTO.setCodigoProfesorFk(asistenciaDTO.getCodigoProfesorFk());
-            asistenciaDTO.setCodigoCursoFk(asistenciaDTO.getCodigoCursoFk());
+            if(qrDto != null){
+                asistenciaDTO.setCodigoQrFk(qrDto);
+                asistenciaDTO.setCodigoProfesorFk(qrDto.getCodigoProfesorFk());
+                asistenciaDTO.setCodigoCursoFk(qrDto.getCursoFk());
+            }else{
+                asistenciaDTO.setCodigoProfesorFk(asistenciaDTO.getCodigoProfesorFk());
+                asistenciaDTO.setCodigoCursoFk(asistenciaDTO.getCodigoCursoFk());
+            }
+
             asistenciaQrRepository.save(asistenciaMapper.dtoToEntity(asistenciaDTO));
             respuestaGeneralDTO.setMessage("Se guardo correctamente");
             respuestaGeneralDTO.setStatus(HttpStatus.CREATED);
