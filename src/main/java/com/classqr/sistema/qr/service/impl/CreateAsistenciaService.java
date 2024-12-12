@@ -38,13 +38,16 @@ public class CreateAsistenciaService implements ICreateAsistenciaService {
     public RespuestaGeneralDTO saveAsistencia(AsistenciaDTO asistenciaDTO) {
         RespuestaGeneralDTO respuestaGeneralDTO = new RespuestaGeneralDTO();
         try{
-            QrDTO qrDto = qrMapper.entityToDto(qrRepository.findByCodigoQr(asistenciaDTO.getCodigoQrFk().getCodigoQr()));
-            if(!estudianteCursoRepository.existsByCodigoEstudianteEntityFk_CodigoEstudianteAndCodigoCursoEntityFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), qrDto.getCursoFk().getCodigoCurso())){
+            QrDTO qrDto =null;
+            if(asistenciaDTO.getCodigoQrFk() != null){
+                qrDto = qrMapper.entityToDto(qrRepository.findByCodigoQr(asistenciaDTO.getCodigoCursoFk().getCodigoCurso()));
+            }
+            if(!estudianteCursoRepository.existsByCodigoEstudianteEntityFk_CodigoEstudianteAndCodigoCursoEntityFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), asistenciaDTO.getCodigoCursoFk().getCodigoCurso())){
                 respuestaGeneralDTO.setStatus(HttpStatus.BAD_REQUEST);
                 respuestaGeneralDTO.setMessage("El estudiante no es de este curso");
                 return respuestaGeneralDTO;
             }
-            if(asistenciaQrRepository.existsByCodigoEstudianteFk_CodigoEstudianteAndCodigoCursoFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), qrDto.getCursoFk().getCodigoCurso())){
+            if(asistenciaQrRepository.existsByCodigoEstudianteFk_CodigoEstudianteAndCodigoCursoFk_CodigoCurso(asistenciaDTO.getCodigoEstudianteFk().getCodigoEstudiante(), asistenciaDTO.getCodigoCursoFk().getCodigoCurso())){
                 respuestaGeneralDTO.setStatus(HttpStatus.BAD_REQUEST);
                 respuestaGeneralDTO.setMessage("Ya se realizo la asistencia con este estudiante");
                 return respuestaGeneralDTO;
@@ -52,8 +55,9 @@ public class CreateAsistenciaService implements ICreateAsistenciaService {
             if(asistenciaDTO.getCodigoAsistencia() == null){
                 asistenciaDTO.setCodigoAsistencia(Utilidades.generarCodigo(CodigoUsuarioEnum.ASISTENCIA));
             }
-            asistenciaDTO.setCodigoProfesorFk(qrDto.getCodigoProfesorFk());
-            asistenciaDTO.setCodigoCursoFk(qrDto.getCursoFk());
+            asistenciaDTO.setCodigoQrFk(qrDto);
+            asistenciaDTO.setCodigoProfesorFk(asistenciaDTO.getCodigoProfesorFk());
+            asistenciaDTO.setCodigoCursoFk(asistenciaDTO.getCodigoCursoFk());
             asistenciaQrRepository.save(asistenciaMapper.dtoToEntity(asistenciaDTO));
             respuestaGeneralDTO.setMessage("Se guardo correctamente");
             respuestaGeneralDTO.setStatus(HttpStatus.CREATED);
